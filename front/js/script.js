@@ -1,15 +1,14 @@
 function getArticle () {
-    // Methode fetch pour récuperer les données des canapés
+    //  Fetch pour récuperer les données des canapés
     fetch('http://localhost:3000/api/products')
     .then(response => {
         if(response.ok) {
             return response.json()
         }
     })
-    // Fonction pour afficher les données reçues dynamiquement dans la page d'accueil
-    .then(function (productArticle) {
-        const nbArticle = productArticle.length
-        for(let x = 0; x < nbArticle; x += 1) {
+    //  Afficher les données reçues dynamiquement dans la page d'accueil
+    .then(function (productArticle) {       
+        for(let x = 0; x < productArticle.length; x += 1) {
             const items = document.getElementById('items') 
             items.innerHTML +=
             `<a href="./product.html?id=${productArticle[x]._id}">
@@ -21,7 +20,7 @@ function getArticle () {
             </a>`
         }
     })
-    .catch(error => console.log("Une erreur est survenue"))
+    .catch(error => console.log("error"))
     
 }
 getArticle();
