@@ -1,5 +1,5 @@
+//  Fetch pour récuperer les données des canapés
 function getArticle () {
-    //  Fetch pour récuperer les données des canapés
     fetch('http://localhost:3000/api/products')
     .then(response => {
         if(response.ok) {
