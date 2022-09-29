@@ -1,26 +1,25 @@
-//  Fetch pour récuperer les données des canapés
+// Afficher les articles
+function productArticles(product) {
+    for(let x = 0; x < product.length; x += 1) {
+        const ITEMS = document.getElementById('items')
+        ITEMS.innerHTML +=
+        `<a href="./product.html?id=${product[x]._id}">
+            <article>
+                <img src="${product[x].imageUrl}" alt=${product[x].altTxt}>
+                <h3 class="productName">${product[x].name}</h3>
+                <p class="productDescription">${product[x].description}</p>
+            </article>
+        </a>`
+    }
+};
+
 function getArticle () {
+    // Récupérer les données des canapés
     fetch('http://localhost:3000/api/products')
-    .then(response => {
-        if(response.ok) {
-            return response.json()
-        }
-    })
-    //  Afficher les données reçues dynamiquement dans la page d'accueil
-    .then(function (productArticle) {       
-        for(let x = 0; x < productArticle.length; x += 1) {
-            const items = document.getElementById('items') 
-            items.innerHTML +=
-            `<a href="./product.html?id=${productArticle[x]._id}">
-                <article>
-                    <img src="${productArticle[x].imageUrl}" alt=${productArticle[x].altTxt}>
-                    <h3 class="productName">${productArticle[x].name}</h3>
-                    <p class="productDescription">${productArticle[x].description}</p>
-                </article>
-            </a>`
-        }
-    })
-    .catch(error => console.log("error"))
-    
-}
+    .then( response => response.json() )
+    .then( product => productArticles(product))
+    .catch(error => console.log(error));
+};  
+
+// On apelle notre fonction
 getArticle();

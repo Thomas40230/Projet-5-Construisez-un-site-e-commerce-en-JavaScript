@@ -11,7 +11,7 @@ const URL_ID = window.location.search;
 const URL_PARAMS = new URLSearchParams(URL_ID);
 const ID_ITEM = URL_PARAMS.get("id");
 
-//Redirection vers la page du panier
+// Redirection vers la page du panier
 function redirectToCart() {
     window.location.href = "cart.html"
 };
@@ -33,7 +33,7 @@ function saveOrder(product) {
     localStorage.setItem(orderKey, JSON.stringify(order))
 };
 
-//Condition panier valide
+// Condition panier valide
 function invalidOrder(color, quantity) {
     if( quantity === 0 ) {
         alert("Veuillez choisir une quantité pour cet article")
@@ -47,7 +47,7 @@ function invalidOrder(color, quantity) {
     }
 }; 
 
-//Ajouter le choix des couleurs pour chaques items
+// Ajouter le choix des couleurs pour chaques items
 function getColors(product) {
     for( let color of product.colors) {
         const CHOICE_COLORS = document.createElement("option");
@@ -57,7 +57,7 @@ function getColors(product) {
     } 
 };
 
-//Ajouter les éléments de manière dynamique dans le HTML
+// Ajouter les éléments dans le HTML
 function displayProduct(product) {
     IMG_PRODUCT.innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}"></img>`;
     NAME_PRODUCT.innerHTML = `<h1 id="title">${product.name}</h1>`;
@@ -66,7 +66,7 @@ function displayProduct(product) {
     getColors(product); // On apelle la fonction getColors pour l'ajouter dans le DOM
 }
 
-//Fonction pour récupérer les données des produits et les utiliser dans la fonction displayProduct
+// Recuperation des données des produits et les utiliser dans la fonction displayProduct
 function recoverDataProduct() {
     fetch(`http://localhost:3000/api/products/${ID_ITEM}`)
         .then(response => response.json())
@@ -74,10 +74,7 @@ function recoverDataProduct() {
         .catch((error) => console.log(error)) 
     };
 
-// On appelle la fonction   
-recoverDataProduct();
-
-//Validation panier
+// Validation panier
 function validItemInCart() {
     fetch(`http://localhost:3000/api/products/${ID_ITEM}`)
     .then(response => response.json())
@@ -93,10 +90,13 @@ function validItemInCart() {
     }
 )};
 
-//Evénement "Ajouter au panier"
+// Evénement "Ajouter au panier"
 function EventBtnAddToCart() {
     BTN_ADD_TO_CART.addEventListener('click', validItemInCart);
     };
-    
+
+// On appelle la fonction   
+recoverDataProduct();    
+
 // On appelle la fonction
 EventBtnAddToCart();
