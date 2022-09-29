@@ -23,7 +23,6 @@ function saveOrder(product) {
         id: product._id,
         name: NAME_PRODUCT,
         color: COLOR_PRODUCT.value,
-        price: PRICE_PRODUCT,
         quantity: Number(QUANTITY_PRODUCT.value),
         imageUrl: IMG_PRODUCT,
         description: DESCRIPTION_PRODUCT,
