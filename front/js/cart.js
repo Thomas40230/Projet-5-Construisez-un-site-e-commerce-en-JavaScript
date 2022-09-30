@@ -1,5 +1,5 @@
 // Tableau du contenu du panier
-const cart = []
+const cart = [];
 
 // Donnée du formulaire
 const INPUT_NAME = document.getElementById("firstName");
@@ -25,91 +25,89 @@ let texteRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
 // Recuperer les items du localstorage pour les mettre dans le panier
 function retrieveLocalStorageItems() {
     for( x = 0; x < localStorage.length; x++)  {
-        const ITEM = localStorage.getItem(localStorage.key(x))
-        const item_object = JSON.parse(ITEM)
-        console.log(item_object)
-        cart.push(item_object)
-        console.log(cart)
+        const ITEM = localStorage.getItem(localStorage.key(x));
+        const item_object = JSON.parse(ITEM);
+        console.log(item_object);
+        cart.push(item_object);
+        console.log(cart);
     };
 };
 
+retrieveLocalStorageItems();
+
 // Recuperer l'ID des produits du panier
 function getIdFromCache() {
-    const idOrder = []
+    const idOrder = [];
     for (let i = 0; i < localStorage.length; i++) {
-      const KEY = localStorage.key(i)
-      const ID = KEY.split("-")[0]
+      const KEY = localStorage.key(i);
+      const ID = KEY.split("-")[0];
       idOrder.push(ID);
     }
-    return idOrder
+    return idOrder;
 };
 
 // Validation du champ prenom
 function firstNameValid() {
-    if(texteRegExp.test(INPUT_NAME.value)) {
-        ERROR_FIRST_NAME_FORM.innerHTML = "Prénom incorrect"
-        return false
+    if(!texteRegExp.test(INPUT_NAME.value)) {
+        ERROR_FIRST_NAME_FORM.innerHTML = "Prénom incorrect";
+        return false;
     }else {
-        ERROR_FIRST_NAME_FORM.innerHTML = "Prénom correct"
-        return true
-    }
+        ERROR_FIRST_NAME_FORM.innerHTML = "Prénom correct";
+        return true;
+    };
 };
 
 // Validation du champ nom
 function lastNameValid() {
-    if(texteRegExp.test(INPUT_LAST_NAME.value)) {
-        ERROR_LAST_NAME_FORM.innerHTML = "Nom incorrect"
-        return false
+    if(!texteRegExp.test(INPUT_LAST_NAME.value)) {
+        ERROR_LAST_NAME_FORM.innerHTML = "Nom incorrect";
+        return false;
     }else {
-        ERROR_LAST_NAME_FORM.innerHTML = "Nom correct"
-        return true
-    }
+        ERROR_LAST_NAME_FORM.innerHTML = "Nom correct";
+        return true;
+    };
 };
 
 // Validation du champ adresse
 function addressNameValid() {
-    if(addressRegExp.test(INPUT_ADRESS.value)) {
-        ERROR_ADDRESS_FORM.innerHTML = "Adresse incorrect"
-        return false
+    if(!addressRegExp.test(INPUT_ADRESS.value)) {
+        ERROR_ADDRESS_FORM.innerHTML = "Adresse incorrect";
+        return false;
     }else {
-        ERROR_ADDRESS_FORM.innerHTML = "Adresse correct"
-        return true
-    }
+        ERROR_ADDRESS_FORM.innerHTML = "Adresse correct";
+        return true;
+    };
 };
 
 // Validation du champ ville
 function cityValid() {
-    if(texteRegExp.test(INPUT_CITY.value)) {
-        ERROR_CITY_FORM.innerHTML = "Nom de Ville incorrect"
-        return false
+    if(!texteRegExp.test(INPUT_CITY.value)) {
+        ERROR_CITY_FORM.innerHTML = "Nom de Ville incorrect";
+        return false;
     }else {
-        ERROR_CITY_FORM.innerHTML = "Nom de Ville correct"
-        return true
-    }
+        ERROR_CITY_FORM.innerHTML = "Nom de Ville correct";
+        return true;
+    };
 };
 
 // Validation du champ Email
 function emailValid() {
-    if(emailRegExp.test(INPUT_MAIL.value)) {
-        ERROR_MAIL_FORM.innerHTML = "Email incorrect"
-        return false
+    if(!emailRegExp.test(INPUT_MAIL.value)) {
+        ERROR_MAIL_FORM.innerHTML = "Email incorrect";
+        return false;
     }else {
-        ERROR_MAIL_FORM.innerHTML = "Email correct"
-        return true
-    }
+        ERROR_MAIL_FORM.innerHTML = "Email correct";
+        return true;
+    };
 };
 
 // Verification de la validation du formulaire
 function formValid() {
-    if(
-        firstNameValid()=== true &&
-        lastNameValid()=== true &&
-        addressNameValid()=== true &&
-        cityValid() === true &&
-        emailValid() === true
-    ) {
-        return true
-    }
+    return firstNameValid() &&
+            lastNameValid() &&
+            addressNameValid() &&
+            cityValid() &&
+            emailValid(); 
 };
 
 // Objet qui contient les informations des clients
@@ -124,12 +122,12 @@ function makeBodyRequest() {
         },
         products: getIdFromCache()
     };
-    return BODY
+    return BODY;
 };
 
 // Méthode POST, on envoie les données du client et l'id des produits à l'API
 function orderRequest() {
-    const ORDER = makeBodyRequest()
+    const ORDER = makeBodyRequest();
     fetch('http://localhost:3000/api/products/order', {
         method: "POST",
         body: JSON.stringify(ORDER),
@@ -137,31 +135,31 @@ function orderRequest() {
             "Content-Type": "application/json",
         }
     })
-        .then((res) => res.json())
-        .then((data) => {
-            localStorage.clear()
-            document.location.href = `confirmation.html?_id=${data.orderId}`
-        })
-    };
+    .then((res) => res.json())
+    .then((data) => {
+        localStorage.clear()
+        document.location.href = `confirmation.html?_id=${data.orderId}`
+    });
+};
 
 // Envoyer les données des clients au serveur
 function submitForm(e) {
-    e.preventDefault()
+    e.preventDefault();
     if(cart.length === 0) { 
-        alert(" Veuillez remplir votre panier car celui-ci est vide !")
-        return
+        alert(" Veuillez remplir votre panier car celui-ci est vide !");
+        return;
     }else if(formValid()) {
     orderRequest();
     }
 };
 
 // Le bouton confirmer appelle la fonction submitform
-BTN_ORDER.addEventListener('click', (e) => submitForm(e))
+BTN_ORDER.addEventListener('click', (e) => submitForm(e));
 
 // Calcul du nombre total d'article dans le panier
 function totalItemsInCart() {
-    let itemQuantity = 0
-    const TOTAL_ITEMS_IN_CART = document.getElementById("totalQuantity")
-    const TOTAL_QUANTITY = cart.reduce((total, item) => total + item.quantity, itemQuantity)
-    TOTAL_ITEMS_IN_CART.textContent = TOTAL_QUANTITY   
+    let itemQuantity = 0;
+    const TOTAL_ITEMS_IN_CART = document.getElementById("totalQuantity");
+    const TOTAL_QUANTITY = cart.reduce((total, item) => total + item.quantity, itemQuantity);
+    TOTAL_ITEMS_IN_CART.textContent = TOTAL_QUANTITY;   
 };
