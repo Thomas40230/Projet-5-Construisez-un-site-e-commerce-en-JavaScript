@@ -50,8 +50,8 @@ function invalidOrder(color, quantity) {
 function getColors(product) {
     for( let color of product.colors) {
         const CHOICE_COLORS = document.createElement("option");
-        CHOICE_COLORS.value = `${color}`
-        CHOICE_COLORS.innerText = `${color}`
+        CHOICE_COLORS.value = `${color}`;
+        CHOICE_COLORS.innerText = `${color}`;
         COLOR_PRODUCT.appendChild(CHOICE_COLORS);
     } 
 };

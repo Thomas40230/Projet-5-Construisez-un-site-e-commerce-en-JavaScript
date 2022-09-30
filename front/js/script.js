@@ -10,7 +10,7 @@ function productArticles(product) {
                 <p class="productDescription">${product[x].description}</p>
             </article>
         </a>`
-    }
+    };
 };
 
 function getArticle () {
