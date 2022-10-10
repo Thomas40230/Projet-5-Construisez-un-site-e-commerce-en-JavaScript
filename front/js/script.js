@@ -13,10 +13,10 @@ function productArticles(product) {
     };
 };
 
+// Récupérer les données des canapés
 function getArticle () {
-    // Récupérer les données des canapés
     fetch('http://localhost:3000/api/products')
-    .then(response => response.json() )
+    .then(response => response.json())
     .then(product => productArticles(product))
     .catch(error => console.log(error));
 };  

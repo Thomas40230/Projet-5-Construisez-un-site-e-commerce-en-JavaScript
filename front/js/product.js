@@ -19,30 +19,45 @@ function redirectToCart() {
 
 // Sauvegarde le panier dans le localStorage
 function saveOrder(product) {
-    let order = {
-        id: product._id,
-        name: NAME_PRODUCT,
-        color: COLOR_PRODUCT.value,
-        quantity: Number(QUANTITY_PRODUCT.value),
-        imageUrl: IMG_PRODUCT,
-        description: DESCRIPTION_PRODUCT,
-        altTxt: product.altTxt
-    }
     let orderKey = `${ID_ITEM}-${COLOR_PRODUCT.value}`
-    localStorage.setItem(orderKey, JSON.stringify(order))
+    const keyExist = localStorage.getItem(orderKey)
+    let order = {}
+    if (keyExist) {
+        order = JSON.parse(keyExist)
+        order.quantity += Number(QUANTITY_PRODUCT.value) 
+    } else {
+        order = {
+            id: product._id,
+            color: COLOR_PRODUCT.value,
+            quantity: Number(QUANTITY_PRODUCT.value),
+            imageUrl: product.imageUrl,
+            description: product.description,
+            altTxt: product.altTxt,
+            name: product.name
+        } 
+    }
+    if (invalidOrder(order.color,order.quantity)) {
+        localStorage.setItem(orderKey, JSON.stringify(order))
+        return true
+    } else {
+        return false
+    }   
 };
 
 // Condition panier valide
 function invalidOrder(color, quantity) {
-    if( quantity === 0 ) {
+    console.log(quantity)
+    if( quantity < 1 ) {
         alert("Veuillez choisir une quantité pour cet article")
-        return true
+        return false
     }else if ( quantity > 100 ) {
         alert("La quantité maximum pour cet article est de 100 exemplaires")
-        return true
+        return false
     }else if ( color === null || color === '' ) {
         alert(" Veuillez choisir une couleur disponible pour cet article")
-        return true
+        return false
+    } else {
+        return true 
     }
 }; 
 
@@ -62,8 +77,8 @@ function displayProduct(product) {
     NAME_PRODUCT.innerHTML = `<h1 id="title">${product.name}</h1>`;
     PRICE_PRODUCT.innerHTML = `<span id="price">${product.price}</span>`;
     DESCRIPTION_PRODUCT.innerHTML = `<p id="description">${product.description}</p>`;
-    getColors(product); // On apelle la fonction getColors pour l'ajouter dans le DOM
-}
+    getColors(product);
+};
 
 // Recuperation des données des produits et les utiliser dans la fonction displayProduct
 function recoverDataProduct() {
@@ -79,13 +94,10 @@ function validItemInCart() {
     .then(response => response.json())
     .then((product) => {
         let colorProduct = document.getElementById("colors").value;
-        let quantityProduct = Number(document.getElementById("quantity").value);
-        if(invalidOrder(colorProduct, quantityProduct) === true) {
-            return
-        } 
-            saveOrder(product)
+        if (saveOrder(product)) {
             alert(`Votre produit ${product.name} en ${QUANTITY_PRODUCT.value} exemplaire(s) à bien été ajouter a votre panier !`)
             redirectToCart();
+        }
     }
 )};
 
